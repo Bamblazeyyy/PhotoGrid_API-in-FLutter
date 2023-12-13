@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,31 +24,33 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> imageUrls = [];
-  ProgressDialog? progressDialog;
+ ProgressDialog? progressDialog;
 
-  @override
-  void initState() {
-    super.initState();
-    progressDialog = ProgressDialog(context, showLogs: true);
-    fetchData();
-  }
-
+@override
+void initState() {
+  super.initState();
+  progressDialog = ProgressDialog(context: context);
+  fetchData();
+}
   Future<void> fetchData() async {
     progressDialog?.show();
 
-    final response = await http.get(Uri.parse('https://api.unsplash.com/photos/random?count=21&client_id=Yte7gbZLt_59ZtngWJ3Wgt4QD2-OJmv7ALc-YO8bLjY'));
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-      List<String> urls = data.map((image) => image['urls']['regular'].toString()).toList();
-      setState(() {
-        imageUrls = urls;
-      });
-    } else {
-      throw Exception('Failed to load images');
-    }
+  Future<void> fetchData() async {
+  progressDialog?.show(max: 100, msg: 'Loading...');
 
-    progressDialog?.dismiss();
+  final response = await http.get(Uri.parse('https://api.unsplash.com/photos/random?count=21&client_id=Yte7gbZLt_59ZtngWJ3Wgt4QD2-OJmv7ALc-YO8bLjY'));
+  if (response.statusCode == 200) {
+    List<dynamic> data = json.decode(response.body);
+    List<String> urls = data.map((image) => image['urls']['regular'].toString()).toList();
+    setState(() {
+      imageUrls = urls;
+    });
+  } else {
+    throw Exception('Failed to load images');
   }
+
+  progressDialog?.dismiss();
+}
 
   @override
   Widget build(BuildContext context) {
