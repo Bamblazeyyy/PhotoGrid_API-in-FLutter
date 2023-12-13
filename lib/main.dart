@@ -26,31 +26,29 @@ class _HomePageState extends State<HomePage> {
   List<String> imageUrls = [];
   ProgressDialog? progressDialog;
 
-@override
-void initState() {
-  super.initState();
-  progressDialog = ProgressDialog(context: context);
-  fetchData();
-}
-  Future<void> fetchData() async {
-    progressDialog?.show();
-
-  Future<void> fetchData() async {
-  progressDialog?.show(max: 100, msg: 'Loading...');
-
-  final response = await http.get(Uri.parse('https://api.unsplash.com/photos/random?count=21&client_id=Yte7gbZLt_59ZtngWJ3Wgt4QD2-OJmv7ALc-YO8bLjY'));
-  if (response.statusCode == 200) {
-    List<dynamic> data = json.decode(response.body);
-    List<String> urls = data.map((image) => image['urls']['regular'].toString()).toList();
-    setState(() {
-      imageUrls = urls;
-    });
-  } else {
-    throw Exception('Failed to load images');
+  @override
+  void initState() {
+    super.initState();
+    progressDialog = ProgressDialog(context: context);
+    fetchData();
   }
 
-  progressDialog?.dismiss();
-}
+  Future<void> fetchData() async {
+    progressDialog?.show(max: 100, msg: 'Loading...');
+
+    final response = await http.get(Uri.parse('https://api.unsplash.com/photos/random?count=21&client_id=Yte7gbZLt_59ZtngWJ3Wgt4QD2-OJmv7ALc-YO8bLjY'));
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      List<String> urls = data.map((image) => image['urls']['regular'].toString()).toList();
+      setState(() {
+        imageUrls = urls;
+      });
+    } else {
+      throw Exception('Failed to load images');
+    }
+
+    progressDialog?.dismiss();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,24 +114,24 @@ class FullViewPage extends StatelessWidget {
   FullViewPage({required this.imageUrl});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 216, 160, 140),
-        title: Row(
-          children: [
-            Text('Full View', style: TextStyle(color: Colors.black, fontSize: 25.0)),
-          ],
-        ),
-        centerTitle: true,
-        toolbarHeight: 60,
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.black,
+    appBar: AppBar(
+      backgroundColor: const Color.fromARGB(255, 216, 160, 140),
+      title: Row(
+        children: [
+          Text('Full View', style: TextStyle(color: Colors.black, fontSize: 25.0)),
+        ],
       ),
-      body: Center(
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.contain,
-        ),
+      centerTitle: true,
+      toolbarHeight: 60,
+    ),
+    body: Center(
+      child: imageUrl != null ? Image.network(
+        imageUrl!,
+        fit: BoxFit.contain,
+        ) : Container(),
       ),
     );
   }
