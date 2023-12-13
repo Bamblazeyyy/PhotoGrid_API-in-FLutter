@@ -70,7 +70,9 @@ class _HomePageState extends State<HomePage> {
       ),
       body: isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                strokeWidth: 7.0
+              ),
             )
           : GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
