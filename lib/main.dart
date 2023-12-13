@@ -70,8 +70,8 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         toolbarHeight: 60,
       ),
-      body: isLoading
-          ? Center(
+      body: isLoading?
+       Center(
               child: CircularProgressIndicator(
                 strokeWidth: 7.0,
               ),
