@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
       body: isLoading
           ? Center(
               child: CircularProgressIndicator(
-                strokeWidth: 7.0
+                strokeWidth: 7.0,
               ),
             )
           : GridView.builder(
@@ -115,10 +115,38 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class FullViewPage extends StatelessWidget {
+class FullViewPage extends StatefulWidget {
   final String imageUrl;
 
   FullViewPage({required this.imageUrl});
+
+  @override
+  _FullViewPageState createState() => _FullViewPageState();
+}
+
+class _FullViewPageState extends State<FullViewPage> {
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final response = await http.get(Uri.parse(widget.imageUrl));
+    if (response.statusCode == 200) {
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      throw Exception('Failed to load image');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +162,18 @@ class FullViewPage extends StatelessWidget {
         centerTitle: true,
         toolbarHeight: 60,
       ),
-      body: Center(
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.contain,
-        ),
-      ),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 7.0,
+              ),
+            )
+          : Center(
+              child: Image.network(
+                widget.imageUrl,
+                fit: BoxFit.contain,
+              ),
+            ),
     );
   }
 }
