@@ -138,14 +138,20 @@ class _FullViewPageState extends State<FullViewPage> {
   }
 
   Future<void> fetchData() async {
+     setState(() {
+      isLoading = true;
+    });
+
     final response = await http.get(Uri.parse(widget.imageUrl));
     if (response.statusCode == 200) {
-      setState(() {
-        isLoading = false;
-      });
+      
     } else {
       throw Exception('Failed to load image');
     }
+
+    setState(() {
+        isLoading = false;
+      });
   }
 
   @override
