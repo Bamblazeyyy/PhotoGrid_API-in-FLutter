@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:progress_dialog/progress_dialog.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,31 +23,34 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> imageUrls = [];
-  ProgressDialog? progressDialog;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    progressDialog = ProgressDialog(context);
     fetchData();
-}
-
- Future<void> fetchData() async {
-  progressDialog?.show();
-
-  final response = await http.get(Uri.parse('https://api.unsplash.com/photos/random?count=21&client_id=Yte7gbZLt_59ZtngWJ3Wgt4QD2-OJmv7ALc-YO8bLjY'));
-  if (response.statusCode == 200) {
-    List<dynamic> data = json.decode(response.body);
-    List<String> urls = data.map((image) => image['urls']['regular'].toString()).toList();
-    setState(() {
-      imageUrls = urls;
-    });
-  } else {
-    throw Exception('Failed to load images');
   }
 
-  progressDialog?.hide();
-}
+  Future<void> fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final response = await http.get(Uri.parse('https://api.unsplash.com/photos/random?count=21&client_id=Yte7gbZLt_59ZtngWJ3Wgt4QD2-OJmv7ALc-YO8bLjY'));
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      List<String> urls = data.map((image) => image['urls']['regular'].toString()).toList();
+      setState(() {
+        imageUrls = urls;
+      });
+    } else {
+      throw Exception('Failed to load images');
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,44 +68,47 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         toolbarHeight: 60,
       ),
-
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-        ),
-        itemCount: imageUrls.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FullViewPage(imageUrl: imageUrls[index]),
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.all(25.0),
-              child: AspectRatio(
-                aspectRatio: 1.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 5.0,
-                    ),
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: Image.network(
-                    imageUrls[index],
-                    fit: BoxFit.cover,
-                  ),
-                ),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
               ),
+              itemCount: imageUrls.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullViewPage(imageUrl: imageUrls[index]),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(25.0),
+                    child: AspectRatio(
+                      aspectRatio: 1.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 5.0,
+                          ),
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        child: Image.network(
+                          imageUrls[index],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
@@ -114,24 +119,24 @@ class FullViewPage extends StatelessWidget {
   FullViewPage({required this.imageUrl});
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Colors.black,
-    appBar: AppBar(
-      backgroundColor: const Color.fromARGB(255, 216, 160, 140),
-      title: Row(
-        children: [
-          Text('Full View', style: TextStyle(color: Colors.black, fontSize: 25.0)),
-        ],
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 216, 160, 140),
+        title: Row(
+          children: [
+            Text('Full View', style: TextStyle(color: Colors.black, fontSize: 25.0)),
+          ],
+        ),
+        centerTitle: true,
+        toolbarHeight: 60,
       ),
-      centerTitle: true,
-      toolbarHeight: 60,
-    ),
-    body: Center(
-      child: imageUrl != null ? Image.network(
-        imageUrl!,
-        fit: BoxFit.contain,
-        ) : Container(),
+      body: Center(
+        child: Image.network(
+          imageUrl,
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }
