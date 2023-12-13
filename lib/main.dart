@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:progress_dialog/progress_dialog.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,14 +24,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> imageUrls = [];
+  ProgressDialog? progressDialog;
 
   @override
   void initState() {
     super.initState();
+    progressDialog = ProgressDialog(context, showLogs: true);
     fetchData();
   }
 
   Future<void> fetchData() async {
+    progressDialog?.show();
+
     final response = await http.get(Uri.parse('https://api.unsplash.com/photos/random?count=21&client_id=Yte7gbZLt_59ZtngWJ3Wgt4QD2-OJmv7ALc-YO8bLjY'));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
@@ -41,6 +46,8 @@ class _HomePageState extends State<HomePage> {
     } else {
       throw Exception('Failed to load images');
     }
+
+    progressDialog?.dismiss();
   }
 
   @override
@@ -79,20 +86,20 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.all(25.0),
               child: AspectRatio(
                 aspectRatio: 1.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 5.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 5.0,
+                    ),
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
-                  borderRadius: BorderRadius.circular(16.0),
+                  child: Image.network(
+                    imageUrls[index],
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                child: Image.network(
-                  imageUrls[index],
-                  fit: BoxFit.cover,
-                 ),
-               ),
-             ),
+              ),
             ),
           );
         },
