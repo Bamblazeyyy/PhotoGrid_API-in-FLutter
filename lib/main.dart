@@ -28,7 +28,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+    Future.delayed(Duration(milliseconds: 500), () {
+      fetchData();
+    });
   }
 
   Future<void> fetchData() async {
@@ -125,19 +127,17 @@ class FullViewPage extends StatefulWidget {
 }
 
 class _FullViewPageState extends State<FullViewPage> {
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    Future.delayed(Duration(milliseconds: 500), () {
+      fetchData();
+    });
   }
 
   Future<void> fetchData() async {
-    setState(() {
-      isLoading = true;
-    });
-
     final response = await http.get(Uri.parse(widget.imageUrl));
     if (response.statusCode == 200) {
       setState(() {
