@@ -77,6 +77,8 @@ class _HomePageState extends State<HomePage> {
             },
             child: Padding(
               padding: EdgeInsets.all(25.0),
+              child: AspectRatio(
+                aspectRatio: 1.0,
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -88,8 +90,9 @@ class _HomePageState extends State<HomePage> {
                 child: Image.network(
                   imageUrls[index],
                   fit: BoxFit.cover,
-                ),
-              ),
+                 ),
+               ),
+             ),
             ),
           );
         },
