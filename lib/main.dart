@@ -162,18 +162,22 @@ class _FullViewPageState extends State<FullViewPage> {
         centerTitle: true,
         toolbarHeight: 60,
       ),
-      body: isLoading
-          ? Center(
+      body: Stack(
+        children: [
+          Center(
+            child: Image.network(
+              widget.imageUrl,
+              fit: BoxFit.contain,
+            ),
+          ),
+          if (isLoading)
+            Center(
               child: CircularProgressIndicator(
                 strokeWidth: 7.0,
               ),
-            )
-          : Center(
-              child: Image.network(
-                widget.imageUrl,
-                fit: BoxFit.contain,
-              ),
             ),
+        ],
+      ),
     );
   }
 }
