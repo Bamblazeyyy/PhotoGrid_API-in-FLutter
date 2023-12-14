@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       isLoading = true;
     });
 
-    final response = await http.get(Uri.parse('https://api.unsplash.com/photos/random?count=21&client_id=Yte7gbZLt_59ZtngWJ3Wgt4QD2-OJmv7ALc-YO8bLjY'));
+    final response = await http.get(Uri.parse('https://api.unsplash.com/photos/random?count=30&client_id=Yte7gbZLt_59ZtngWJ3Wgt4QD2-OJmv7ALc-YO8bLjY'));
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       List<String> urls = data.map((image) => image['urls']['regular'].toString()).toList();
