@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 216, 160, 140),
+        backgroundColor: Color.fromARGB(255, 221, 161, 139),
         title: Row(
           children: [
             const Icon(Icons.photo_album),
@@ -159,7 +159,7 @@ class _FullViewPageState extends State<FullViewPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 216, 160, 140),
+        backgroundColor: Color.fromARGB(255, 221, 161, 139),
         title: Row(
           children: [
             Text('Full View', style: TextStyle(color: Colors.black, fontSize: 25.0)),
