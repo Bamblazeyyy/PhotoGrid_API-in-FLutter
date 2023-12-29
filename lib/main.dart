@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         imageUrls = urls;
       });
     } else {
-      throw Exception('Failed to load images');
+      throw Exception('Failed to load photos');
     }
 
     setState(() {
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             const Icon(Icons.photo_album),
             const SizedBox(width: 35),
-            const Text('My Gallery', style: TextStyle(color: Colors.black, fontSize: 25.0)),
+            const Text('My Photos', style: TextStyle(color: Colors.black, fontSize: 25.0)),
           ],
         ),
         centerTitle: true,
