@@ -147,7 +147,7 @@ class _FullViewPageState extends State<FullViewPage> {
     if (response.statusCode == 200) {
       
     } else {
-      throw Exception('Failed to load image');
+      throw Exception('Failed to load photos');
     }
 
     setState(() {
@@ -163,7 +163,7 @@ class _FullViewPageState extends State<FullViewPage> {
         backgroundColor: Color.fromARGB(255, 221, 161, 139),
         title: Row(
           children: [
-            Text('Full View', style: TextStyle(color: Colors.black, fontSize: 25.0)),
+            Text('Full View Images', style: TextStyle(color: Colors.black, fontSize: 25.0)),
           ],
         ),
         centerTitle: true,
