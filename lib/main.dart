@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
        Center(
               child: CircularProgressIndicator(
                 strokeWidth: 7.0,
-                color: Colors.grey,
+                color: Colors.blueGrey,
               ),
             )
           : GridView.builder(
