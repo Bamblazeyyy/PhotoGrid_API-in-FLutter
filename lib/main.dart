@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 221, 161, 139),
+        backgroundColor: Colors.blueGrey,
         title: Row(
           children: [
             const Icon(Icons.photo_album),
